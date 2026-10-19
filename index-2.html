@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#bfe0ff">
+  <meta name="description" content="BUBBLE.OS — a Y2K pocket homepage">
+  <title>BUBBLE.OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <style>
+/* =========================================================
+   BUBBLE.OS — Y2K pocket homepage
+   ========================================================= */
+
+/* ---------- 1. Tokens ---------- */
+:root {
+  --sky: #9fd0ff;
+  --baby: #d6ecff;
+  --cream: #fffaf0;
+  --pink: #ff9ecf;
+  --lime: #d4ff5e;
+  --navy: #1d2a6b;
+  --ink: #18213f;
+  --muted: #5b6a9a;
+  --glass: rgba(255, 255, 255, 0.58);
+  --line: rgba(29, 42, 107, 0.85);
+  --shadow: rgba(29, 42, 107, 0.9);
+  --bg-top: #bfe0ff;
+  --bg-bottom: #fff3fa;
+  --grid: rgba(29, 42, 107, 0.16);
+
+  --chrome: linear-gradient(180deg, #ffffff 0%, #dce6f5 30%, #7f93b5 50%, #eef4ff 62%, #a9b9d6 100%);
+  --iris: conic-gradient(from 0deg, #ffd6f0, #c8e6ff, #d9ffe4, #fff6c8, #e6d4ff, #ffd6f0);
+
+  --radius: 22px;
+  --font-pixel: "Silkscreen", ui-monospace, monospace;
+  --font-mono: "VT323", ui-monospace, monospace;
+  --font-body: "Noto Sans TC", system-ui, -apple-system, sans-serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="night"] {
+  --sky: #5e8bff;
+  --baby: #1a2560;
+  --cream: #0f1638;
+  --pink: #ff7ec0;
+  --navy: #bfd4ff;
+  --ink: #e8f0ff;
+  --muted: #a8b8e8;
+  --glass: rgba(22, 32, 86, 0.62);
+  --line: rgba(191, 212, 255, 0.7);
+  --shadow: rgba(4, 8, 30, 0.95);
+  --bg-top: #0b1030;
+  --bg-bottom: #2a1a4a;
+  --grid: rgba(150, 190, 255, 0.18);
+}
+
+/* ---------- 2. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.5s, color 0.3s;
+}
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; }
+a { color: inherit; text-decoration: none; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px dashed var(--pink); outline-offset: 3px; }
+
+.pixel-label {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- 3. Boot ---------- */
+.boot {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-content: center; gap: 18px;
+  padding: 24px;
+  background: #0b1030;
+  color: #bfe0ff;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+.boot.is-done { opacity: 0; visibility: hidden; }
+.boot__logo {
+  font-family: var(--font-pixel); font-size: 34px; font-weight: 700;
+  background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.boot__logo span { color: var(--pink); -webkit-text-fill-color: var(--pink); }
+.boot__log { margin: 0; min-height: 7.5em; font-family: var(--font-mono); font-size: 20px; line-height: 1.25; white-space: pre-wrap; }
+.boot__bar { width: 240px; height: 10px; border: 1.5px solid #bfe0ff; border-radius: 6px; overflow: hidden; }
+.boot__bar i { display: block; width: 0; height: 100%; background: repeating-linear-gradient(90deg, #ff9ecf 0 8px, #9fd0ff 8px 16px); transition: width 0.25s; }
+
+/* ---------- 4. Background ---------- */
+.bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; filter: blur(30px); opacity: 0.7; animation: float 14s ease-in-out infinite; }
+.orb--1 { width: 280px; height: 280px; top: -60px; left: -80px; background: var(--sky); }
+.orb--2 { width: 220px; height: 220px; top: 30%; right: -70px; background: var(--pink); animation-delay: -5s; }
+.orb--3 { width: 200px; height: 200px; bottom: 12%; left: 10%; background: #c9ffe8; animation-delay: -9s; opacity: 0.5; }
+.floor {
+  position: absolute; left: -50%; right: -50%; bottom: -10%; height: 45%;
+  background-image:
+    linear-gradient(var(--grid) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--grid) 1.5px, transparent 1.5px);
+  background-size: 48px 48px;
+  transform: perspective(380px) rotateX(62deg);
+  transform-origin: top center;
+  mask-image: linear-gradient(to bottom, transparent, #000 40%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%);
+  animation: floor 4s linear infinite;
+}
+@keyframes float { 50% { transform: translate(30px, -40px) scale(1.08); } }
+@keyframes floor { to { background-position: 0 48px; } }
+
+/* ---------- 5. Phone frame ---------- */
+.phone {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  width: 100%; max-width: 430px; height: 100dvh;
+  margin: 0 auto;
+}
+@media (min-width: 520px) {
+  body { display: grid; place-items: center; }
+  .phone {
+    height: min(880px, calc(100dvh - 48px));
+    border-radius: 48px;
+    border: 10px solid transparent;
+    background: linear-gradient(var(--cream), var(--cream)) padding-box, var(--chrome) border-box;
+    box-shadow: 0 30px 60px -20px rgba(29, 42, 107, 0.45), inset 0 0 0 1.5px var(--line);
+    overflow: hidden;
+  }
+  .phone::before { /* camera pill */
+    content: ""; position: absolute; top: 10px; left: 50%; z-index: 5;
+    width: 92px; height: 22px; border-radius: 12px; transform: translateX(-50%);
+    background: #10163a;
+  }
+  .status { padding-top: 38px !important; }
+}
+
+/* ---------- 6. Status bar ---------- */
+.status {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(10px + var(--safe-top)) 22px 8px;
+  font-family: var(--font-mono); font-size: 22px; color: var(--navy);
+}
+.status__signal { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+.status__signal i { width: 4px; background: var(--navy); border-radius: 1px; }
+.status__signal i:nth-child(1) { height: 25%; }
+.status__signal i:nth-child(2) { height: 50%; }
+.status__signal i:nth-child(3) { height: 75%; }
+.status__signal i:nth-child(4) { height: 100%; }
+.status__batt { position: relative; width: 26px; height: 13px; border: 1.5px solid var(--navy); border-radius: 3px; }
+.status__batt::after { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; background: var(--navy); border-radius: 0 1px 1px 0; }
+.status__batt i { position: absolute; inset: 1.5px; right: 25%; background: var(--lime); border-radius: 1px; }
+
+/* ---------- 7. Screens ---------- */
+.screens { position: relative; flex: 1; overflow: hidden; }
+.screen {
+  position: absolute; inset: 0;
+  padding: 6px 18px 28px;
+  overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen.is-active { animation: screenIn 0.4s cubic-bezier(.2, .9, .3, 1.3); }
+@keyframes screenIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } }
+.section-label { margin: 18px 4px 10px; }
+.section-row { display: flex; align-items: center; justify-content: space-between; }
+.hint { margin: 12px 4px 0; font-size: 12px; color: var(--muted); text-align: center; }
+
+/* ---------- 8. Card (shared) ---------- */
+.card {
+  position: relative;
+  background: var(--glass);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 0 var(--shadow);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- 9. Hero ---------- */
+.hero { position: relative; padding: 18px 4px 20px; }
+.chrome-text {
+  margin: 8px 0 10px;
+  font-family: var(--font-pixel); font-weight: 700;
+  font-size: clamp(42px, 13vw, 54px); line-height: 0.98; letter-spacing: -0.01em;
+  background: var(--chrome);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-text-stroke: 1.5px var(--navy);
+  filter: drop-shadow(3px 4px 0 var(--pink));
+}
+.hero__sub { margin: 0; color: var(--muted); font-size: 14px; }
+.theme-btn {
+  position: absolute; top: 14px; right: 4px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--chrome); border: 1.5px solid var(--line);
+  box-shadow: 0 3px 0 var(--shadow);
+  font-size: 20px; color: #1d2a6b;
+  transition: transform 0.15s;
+}
+.theme-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+.star { position: absolute; color: var(--pink); animation: twinkle 2.4s ease-in-out infinite; pointer-events: none; }
+.star--a { top: 70px; right: 60px; font-size: 26px; }
+.star--b { top: 150px; right: 22px; font-size: 18px; color: var(--sky); animation-delay: -0.8s; }
+.star--c { top: 210px; right: 88px; font-size: 14px; color: var(--lime); animation-delay: -1.6s; }
+@keyframes twinkle { 50% { transform: scale(0.5) rotate(45deg); opacity: 0.35; } }
+
+/* ---------- 10. Marquee ---------- */
+.marquee {
+  margin: 0 -18px 18px; padding: 7px 0;
+  background: var(--sky); color: #1d2a6b;
+  border-block: 1.5px solid var(--line);
+  overflow: hidden; transform: rotate(-2deg);
+}
+.marquee__track { display: flex; width: max-content; animation: marquee 18s linear infinite; }
+.marquee__track span { font-family: var(--font-pixel); font-size: 13px; white-space: nowrap; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- 11. ID card ---------- */
+.idcard { padding: 14px 16px 52px; overflow: hidden; background: linear-gradient(135deg, var(--glass), color-mix(in srgb, var(--baby) 70%, transparent)); }
+.idcard__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1.5px dashed var(--line); }
+.idcard__no { font-family: var(--font-mono); font-size: 20px; color: var(--navy); }
+.idcard__body { display: flex; gap: 16px; padding-top: 14px; align-items: center; }
+.avatar {
+  position: relative; flex: none;
+  width: 84px; height: 84px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, #fff 0 12%, transparent 13%), radial-gradient(circle at 50% 55%, #c8e6ff, #7fb8ff);
+  border: 1.5px solid var(--line);
+  box-shadow: inset -6px -8px 0 rgba(29, 42, 107, 0.15), 0 3px 0 var(--shadow);
+  animation: bob 3s ease-in-out infinite;
+}
+.avatar__eye { position: absolute; top: 38%; width: 7px; height: 11px; background: #1d2a6b; border-radius: 4px; }
+.avatar__eye:first-child { left: 32%; }
+.avatar__eye:nth-child(2) { right: 32%; }
+.avatar__mouth { position: absolute; left: 50%; top: 56%; width: 16px; height: 8px; border: 2.5px solid #1d2a6b; border-top: 0; border-radius: 0 0 10px 10px; transform: translateX(-50%); }
+.avatar::after { content: "♡"; position: absolute; right: -6px; top: -4px; font-size: 18px; color: var(--pink); }
+@keyframes bob { 50% { transform: translateY(-4px); } }
+.idcard__info { flex: 1; margin: 0; display: grid; gap: 4px; }
+.idcard__info div { display: flex; justify-content: space-between; gap: 8px; }
+.idcard__info dt { font-family: var(--font-pixel); font-size: 10px; color: var(--muted); padding-top: 3px; }
+.idcard__info dd { margin: 0; font-weight: 700; font-size: 14px; color: var(--navy); text-align: right; }
+.dot { display: inline-block; width: 8px; height: 8px; margin-right: 2px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 2px rgba(212, 255, 94, 0.35); animation: twinkle 1.6s infinite; }
+.holo {
+  position: absolute; right: 12px; bottom: 10px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--iris); opacity: 0.85;
+  border: 1.5px solid var(--line);
+  animation: spin 6s linear infinite;
+}
+
+/* ---------- 12. Tiles ---------- */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.tile {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+  min-height: 92px; padding: 12px 14px;
+  border: 1.5px solid var(--line); border-radius: 18px;
+  box-shadow: 0 4px 0 var(--shadow);
+  font-family: var(--font-pixel); font-size: 12px; color: #1d2a6b; text-align: left;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.tile:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--shadow); }
+.tile__icon { font-size: 26px; line-height: 1; }
+.tile--blue  { background: #bfe0ff; }
+.tile--pink  { background: #ffc8e4; }
+.tile--cream { background: #fff1c8; }
+.tile--lime  { background: #e6ff9e; }
+
+/* ---------- 13. Player ---------- */
+.player { padding: 22px 18px 18px; text-align: center; }
+.disc {
+  position: relative; width: 168px; height: 168px; margin: 0 auto 16px; border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 18%, rgba(255,255,255,0.6) 18.5% 19.5%, transparent 20%),
+    repeating-radial-gradient(circle, rgba(255,255,255,0.18) 0 2px, transparent 2px 5px),
+    var(--iris);
+  border: 1.5px solid var(--line);
+  box-shadow: 0 4px 0 var(--shadow), inset 0 0 0 10px rgba(255,255,255,0.25);
+  animation: spin 5s linear infinite paused;
+}
+.disc__hole { position: absolute; inset: 0; margin: auto; width: 26px; height: 26px; border-radius: 50%; background: var(--cream); border: 1.5px solid var(--line); }
+.player.is-playing .disc { animation-play-state: running; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.player__title { margin: 0; font-family: var(--font-pixel); font-size: 18px; color: var(--navy); }
+.player__artist { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+
+.eq { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 34px; margin: 14px 0 10px; }
+.eq i { width: 8px; height: 20%; border-radius: 2px 2px 0 0; background: linear-gradient(var(--pink), var(--sky)); transition: height 0.12s; }
+
+.progress__bar { height: 10px; border: 1.5px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--baby); }
+.progress__bar i { display: block; width: 0; height: 100%; background: repeating-linear-gradient(90deg, var(--pink) 0 6px, var(--sky) 6px 12px); }
+.progress__time { display: flex; justify-content: space-between; margin-top: 2px; font-family: var(--font-mono); font-size: 18px; color: var(--muted); }
+
+.controls { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 8px; }
+.ctrl {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--chrome); border: 1.5px solid var(--line); box-shadow: 0 3px 0 var(--shadow);
+  font-size: 16px; color: #1d2a6b;
+}
+.ctrl--main { width: 64px; height: 64px; font-size: 22px; background: linear-gradient(180deg, #ffd1e8, var(--pink)); }
+.ctrl:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+
+.playlist { list-style: none; margin: 0; padding: 6px; }
+.playlist li button {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 10px 12px; border-radius: 14px; text-align: left;
+}
+.playlist li button:hover { background: color-mix(in srgb, var(--sky) 25%, transparent); }
+.playlist li.is-current button { background: color-mix(in srgb, var(--pink) 30%, transparent); }
+.playlist__no { font-family: var(--font-mono); font-size: 20px; color: var(--muted); width: 22px; }
+.playlist__name { flex: 1; font-weight: 700; color: var(--navy); }
+.playlist__len { font-family: var(--font-mono); font-size: 18px; color: var(--muted); }
+
+/* ---------- 14. Sticker board ---------- */
+.chip {
+  padding: 4px 12px; border-radius: 99px;
+  border: 1.5px solid var(--line); background: var(--glass);
+  font-family: var(--font-pixel); font-size: 11px; color: var(--navy);
+}
+.board {
+  position: relative; height: 440px;
+  border: 1.5px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 4px 0 var(--shadow);
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  overflow: hidden; touch-action: none;
+}
+.sticker {
+  position: absolute;
+  display: grid; place-items: center;
+  min-width: 64px; height: 64px; padding: 0 10px;
+  border-radius: 50%;
+  background: #fff; color: #1d2a6b;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--line), 0 5px 0 rgba(29,42,107,0.35);
+  font-size: 32px; line-height: 1;
+  user-select: none; -webkit-user-select: none; cursor: grab; touch-action: none;
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.sticker.is-dragging { cursor: grabbing; transform: rotate(var(--r, 0deg)) scale(1.12); box-shadow: 0 0 0 1.5px var(--line), 0 12px 18px rgba(29,42,107,0.3); }
+.sticker--star   { background: #fff1a8; --r: -8deg; }
+.sticker--heart  { background: #ffc8e4; color: #e0408a; --r: 10deg; }
+.sticker--cloud  { background: #c8e6ff; --r: -4deg; }
+.sticker--flower { background: #e6d4ff; color: #7a4fd0; --r: 6deg; }
+.sticker--spark  { background: var(--iris); --r: 14deg; }
+.sticker--text   { border-radius: 16px; font-family: var(--font-pixel); font-size: 22px; font-weight: 700; background: #bfe0ff; --r: -6deg; }
+.sticker--pink   { background: #ff9ecf; --r: 8deg; }
+.sticker--lime   { background: #e6ff9e; --r: -12deg; }
+
+/* ---------- 15. Memo ---------- */
+.memo-form { display: grid; gap: 12px; padding: 16px; }
+.field { display: grid; gap: 4px; }
+.field input, .field textarea {
+  width: 100%; padding: 10px 12px; resize: none;
+  border: 1.5px solid var(--line); border-radius: 12px;
+  background: var(--cream); color: var(--ink);
+  font-size: 15px;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 0.7; }
+.memo-form__foot { display: flex; justify-content: space-between; align-items: center; }
+.counter { font-family: var(--font-mono); font-size: 18px; color: var(--muted); }
+.btn {
+  padding: 8px 20px; border-radius: 99px;
+  background: linear-gradient(180deg, #ffd1e8, var(--pink));
+  border: 1.5px solid var(--line); box-shadow: 0 3px 0 var(--shadow);
+  font-family: var(--font-pixel); font-size: 13px; color: #1d2a6b;
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+.memo-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+.memo-item { padding: 12px 14px; animation: screenIn 0.35s ease; }
+.memo-item:nth-child(3n+1) { background: color-mix(in srgb, #bfe0ff 55%, var(--glass)); }
+.memo-item:nth-child(3n+2) { background: color-mix(in srgb, #ffc8e4 55%, var(--glass)); }
+.memo-item:nth-child(3n)   { background: color-mix(in srgb, #fff1c8 55%, var(--glass)); }
+.memo-item__head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.memo-item__name { font-family: var(--font-pixel); font-size: 12px; color: #1d2a6b; }
+.memo-item__time { font-family: var(--font-mono); font-size: 16px; color: #5b6a9a; }
+.memo-item__msg { margin: 4px 0 0; color: #18213f; word-break: break-word; }
+.memo-item__del { font-size: 14px; color: #5b6a9a; padding: 2px 6px; }
+
+/* ---------- 16. Dock ---------- */
+.dock {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  margin: 0 12px calc(12px + var(--safe-bottom));
+  padding: 8px 6px;
+  background: var(--glass);
+  border: 1.5px solid var(--line); border-radius: 26px;
+  box-shadow: 0 4px 0 var(--shadow);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+.dock__btn {
+  position: relative;
+  display: grid; justify-items: center; gap: 2px;
+  padding: 6px 0; border-radius: 18px;
+  color: var(--muted);
+  transition: transform 0.2s cubic-bezier(.2,.9,.3,1.4), color 0.2s;
+}
+.dock__icon { font-size: 22px; line-height: 1; }
+.dock__label { font-family: var(--font-pixel); font-size: 9px; letter-spacing: 0.05em; }
+.dock__btn.is-active { color: var(--navy); transform: translateY(-4px); }
+.dock__btn.is-active::after {
+  content: ""; position: absolute; bottom: -4px; left: 50%;
+  width: 6px; height: 6px; border-radius: 50%; transform: translateX(-50%);
+  background: var(--pink); box-shadow: 0 0 8px var(--pink);
+}
+
+/* ---------- 17. Tap sparkles ---------- */
+.spark {
+  position: fixed; z-index: 90; pointer-events: none;
+  font-size: 16px; color: var(--pink);
+  animation: spark 0.7s ease-out forwards;
+}
+@keyframes spark {
+  from { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+  to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.1) rotate(90deg); opacity: 0; }
+}
+
+/* ---------- 18. Photo booth ---------- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ID 卡頭像變成按鈕，設定照片後顯示照片 */
+.avatar { padding: 0; cursor: pointer; }
+.avatar.has-photo { background-size: cover; background-position: center; }
+.avatar.has-photo .avatar__eye,
+.avatar.has-photo .avatar__mouth { display: none; }
+
+.cam-status { font-size: 10px; }
+.cam-status.is-live { background: #ff5e7a; color: #fff; border-color: #ff5e7a; animation: twinkle 1.6s infinite; }
+
+.booth { padding: 12px; }
+.viewfinder {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px; overflow: hidden;
+  background: #10163a;
+  border: 1.5px solid var(--line);
+  transition: aspect-ratio 0.3s;
+}
+.viewfinder[data-mode="single"] { aspect-ratio: 4 / 5; }
+.viewfinder video,
+.viewfinder img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.viewfinder video { transform: scaleX(-1); } /* 前鏡頭像照鏡子一樣 */
+
+/* 預覽濾鏡（實際成品由 JS 逐像素處理） */
+.viewfinder[data-filter="pink"]  :is(video, img) { filter: sepia(0.25) saturate(1.3) hue-rotate(-25deg) brightness(1.08) contrast(0.9); }
+.viewfinder[data-filter="mono"]  :is(video, img) { filter: grayscale(1) contrast(1.15); }
+.viewfinder[data-filter="retro"] :is(video, img) { filter: sepia(0.6) contrast(0.88) brightness(1.06); }
+.viewfinder[data-filter="blue"]  :is(video, img) { filter: sepia(0.3) hue-rotate(170deg) saturate(1.2) brightness(1.08) contrast(0.92); }
+
+.viewfinder__frame {
+  position: absolute; inset: 10px; z-index: 2;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  pointer-events: none;
+}
+.viewfinder__frame::before,
+.viewfinder__frame::after {
+  position: absolute; font-size: 30px; line-height: 1;
+  -webkit-text-stroke: 1.5px #1d2a6b;
+}
+.viewfinder__frame::before { top: -12px; left: -8px; }
+.viewfinder__frame::after  { bottom: -10px; right: -6px; }
+.viewfinder[data-frame="star"]  .viewfinder__frame::before { content: "✦"; color: #fff1a8; }
+.viewfinder[data-frame="star"]  .viewfinder__frame::after  { content: "★"; color: #d4ff5e; }
+.viewfinder[data-frame="heart"] .viewfinder__frame { border-color: #ffc8e4; }
+.viewfinder[data-frame="heart"] .viewfinder__frame::before { content: "♡"; color: #ffffff; }
+.viewfinder[data-frame="heart"] .viewfinder__frame::after  { content: "♥"; color: #ff7ec0; }
+.viewfinder[data-frame="cloud"] .viewfinder__frame { border-color: #c8e6ff; }
+.viewfinder[data-frame="cloud"] .viewfinder__frame::before { content: "☁︎"; color: #c8e6ff; }
+.viewfinder[data-frame="cloud"] .viewfinder__frame::after  { content: "✿"; color: #ffc8e4; }
+
+.viewfinder__shots {
+  position: absolute; top: 16px; right: 20px; z-index: 3;
+  font-family: var(--font-mono); font-size: 24px; color: #fff;
+  text-shadow: 0 2px 0 #1d2a6b;
+}
+.viewfinder__count {
+  position: absolute; inset: 0; z-index: 3;
+  display: grid; place-items: center;
+  font-family: var(--font-pixel); font-size: 96px; font-weight: 700;
+  color: #fff; -webkit-text-stroke: 3px #1d2a6b;
+  text-shadow: 4px 5px 0 var(--pink);
+  pointer-events: none;
+}
+.viewfinder__count.pop { animation: pop 0.8s ease-out; }
+@keyframes pop {
+  from { transform: scale(1.6); opacity: 0; }
+  30%  { transform: scale(1); opacity: 1; }
+}
+.viewfinder__flash { position: absolute; inset: 0; z-index: 4; background: #fff; opacity: 0; pointer-events: none; }
+.viewfinder__flash.on { animation: flash 0.45s ease-out; }
+@keyframes flash { from { opacity: 0.95; } to { opacity: 0; } }
+
+.viewfinder__idle {
+  position: absolute; inset: 0; z-index: 5;
+  display: grid; place-content: center; justify-items: center; gap: 10px;
+  padding: 20px; text-align: center;
+  color: #bfe0ff;
+  background:
+    radial-gradient(circle, rgba(191, 224, 255, 0.12) 1.5px, transparent 2px) 0 0 / 20px 20px,
+    radial-gradient(circle at 50% 40%, #1d2a6b, #0b1030);
+}
+.viewfinder__idle p { margin: 0; font-size: 13px; }
+.viewfinder__icon { font-size: 40px; line-height: 1; }
+.upload-chip {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12); color: #bfe0ff; border-color: rgba(191, 224, 255, 0.6);
+}
+.upload-chip:focus-within { outline: 2px dashed var(--pink); outline-offset: 3px; }
+
+.booth__opts { display: grid; gap: 8px; margin: 14px 2px 6px; }
+.opt-row { display: flex; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.opt-row::-webkit-scrollbar { display: none; }
+.opt-row__label { flex: none; width: 56px; font-size: 10px; }
+.opt-row .chip { flex: none; white-space: nowrap; }
+.chip.is-on { background: var(--pink); color: #1d2a6b; }
+.chip:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.booth__foot { display: flex; justify-content: center; margin-top: 10px; }
+.shutter {
+  display: grid; place-items: center;
+  width: 76px; height: 76px; border-radius: 50%;
+  background: var(--chrome);
+  border: 1.5px solid var(--line);
+  box-shadow: 0 4px 0 var(--shadow);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.shutter span {
+  width: 54px; height: 54px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #fff 0 10%, transparent 11%),
+    linear-gradient(180deg, #ffd1e8, var(--pink));
+  border: 1.5px solid var(--line);
+}
+.shutter:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--shadow); }
+.shutter:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.result__print { display: flex; justify-content: center; padding: 8px 0 4px; }
+.result__print img {
+  display: block; width: min(210px, 64%); height: auto;
+  border-radius: 10px; border: 1.5px solid var(--line);
+  box-shadow: 0 6px 0 var(--shadow), 0 18px 30px -12px rgba(29, 42, 107, 0.5);
+  transform: rotate(-2.5deg);
+  animation: screenIn 0.5s cubic-bezier(.2, .9, .3, 1.3);
+}
+.result__print img.is-single { width: min(280px, 82%); }
+.result__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin-top: 20px; }
+a.btn { display: inline-block; }
+.btn--chrome { background: var(--chrome); }
+
+/* ---------- 19. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .marquee__track { transform: none; }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- ===== Boot screen ===== -->
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot__logo">BUBBLE<span>.OS</span></div>
+    <pre class="boot__log" id="bootLog"></pre>
+    <div class="boot__bar"><i id="bootBar"></i></div>
+  </div>
+
+  <!-- ===== Background ===== -->
+  <div class="bg" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+    <div class="floor"></div>
+  </div>
+
+  <main class="phone" id="phone">
+
+    <!-- Status bar -->
+    <header class="status">
+      <span class="status__signal" aria-label="signal full"><i></i><i></i><i></i><i></i></span>
+      <span class="status__time" id="clock">00:00</span>
+      <span class="status__batt" aria-label="battery 80%"><i></i></span>
+    </header>
+
+    <div class="screens">
+
+      <!-- ========== HOME ========== -->
+      <section class="screen is-active" id="home" role="tabpanel" aria-labelledby="tab-home">
+        <div class="hero">
+          <button class="theme-btn" id="themeBtn" aria-label="切換日夜模式">
+            <span class="theme-btn__icon">☀︎</span>
+          </button>
+          <p class="pixel-label">// ver 2.0 · <span id="today">2000.01.01</span></p>
+          <h1 class="chrome-text">HELLO,<br>NEW<br>SIGNAL</h1>
+          <p class="hero__sub">一台來自 2003 年的未來手機。<br>收訊滿格，心情晴朗 ☁︎</p>
+          <span class="star star--a">✦</span>
+          <span class="star star--b">✧</span>
+          <span class="star star--c">★</span>
+        </div>
+
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee__track">
+            <span>★ NEW SIGNAL ★ POCKET CLUB ★ STAY CUTE ★ LOADING HAPPINESS ★ 2003 FOREVER ★&nbsp;</span>
+            <span>★ NEW SIGNAL ★ POCKET CLUB ★ STAY CUTE ★ LOADING HAPPINESS ★ 2003 FOREVER ★&nbsp;</span>
+          </div>
+        </div>
+
+        <article class="card idcard">
+          <header class="idcard__head">
+            <span class="pixel-label">MEMBER ID</span>
+            <span class="idcard__no">No. 0722</span>
+          </header>
+          <div class="idcard__body">
+            <button class="avatar" type="button" data-go="photo" aria-label="拍一張大頭照當頭像">
+              <span class="avatar__eye" aria-hidden="true"></span><span class="avatar__eye" aria-hidden="true"></span>
+              <span class="avatar__mouth" aria-hidden="true"></span>
+            </button>
+            <dl class="idcard__info">
+              <div><dt>NAME</dt><dd>YOUR NAME</dd></div>
+              <div><dt>BIRTH</dt><dd>2003.07.22</dd></div>
+              <div><dt>MOOD</dt><dd>☁︎ 晴時多雲</dd></div>
+              <div><dt>STATUS</dt><dd><span class="dot"></span> ONLINE</dd></div>
+            </dl>
+          </div>
+          <span class="holo" aria-hidden="true"></span>
+        </article>
+
+        <div class="tiles">
+          <button class="tile tile--blue" data-go="music"><span class="tile__icon">◉</span><span>MUSIC</span></button>
+          <button class="tile tile--pink" data-go="stickers"><span class="tile__icon">♡</span><span>STICKER</span></button>
+          <button class="tile tile--cream" data-go="memo"><span class="tile__icon">✎</span><span>MEMO</span></button>
+          <a class="tile tile--lime" href="https://github.com/" target="_blank" rel="noopener"><span class="tile__icon">↗</span><span>GITHUB</span></a>
+        </div>
+      </section>
+
+      <!-- ========== MUSIC ========== -->
+      <section class="screen" id="music" role="tabpanel" aria-labelledby="tab-music" hidden>
+        <p class="pixel-label section-label">// NOW PLAYING</p>
+        <article class="card player" id="player">
+          <div class="disc" aria-hidden="true"><span class="disc__hole"></span></div>
+          <div class="player__meta">
+            <h2 class="player__title" id="trackTitle">—</h2>
+            <p class="player__artist" id="trackArtist">—</p>
+          </div>
+          <div class="eq" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="progress">
+            <div class="progress__bar"><i id="progressFill"></i></div>
+            <div class="progress__time"><span id="timeNow">0:00</span><span id="timeTotal">0:00</span></div>
+          </div>
+          <div class="controls">
+            <button class="ctrl" id="prevBtn" aria-label="上一首">⏮</button>
+            <button class="ctrl ctrl--main" id="playBtn" aria-label="播放">▶</button>
+            <button class="ctrl" id="nextBtn" aria-label="下一首">⏭</button>
+          </div>
+        </article>
+
+        <p class="pixel-label section-label">// PLAYLIST</p>
+        <ol class="card playlist" id="playlist"></ol>
+        <p class="hint">♪ 音樂由瀏覽器即時合成 8-bit 音色，記得打開音量</p>
+      </section>
+
+      <!-- ========== STICKERS ========== -->
+      <section class="screen" id="stickers" role="tabpanel" aria-labelledby="tab-stickers" hidden>
+        <div class="section-row">
+          <p class="pixel-label section-label">// STICKER BOARD</p>
+          <button class="chip" id="stickerReset">RESET</button>
+        </div>
+        <div class="board" id="board">
+          <span class="sticker sticker--star"  data-id="s1" data-x="12" data-y="10">★</span>
+          <span class="sticker sticker--heart" data-id="s2" data-x="62" data-y="8">♡</span>
+          <span class="sticker sticker--text"  data-id="s3" data-x="30" data-y="34">Y2K</span>
+          <span class="sticker sticker--cloud" data-id="s4" data-x="66" data-y="38">☁︎</span>
+          <span class="sticker sticker--text sticker--pink" data-id="s5" data-x="10" data-y="58">BFF</span>
+          <span class="sticker sticker--flower" data-id="s6" data-x="56" data-y="64">✿</span>
+          <span class="sticker sticker--text sticker--lime" data-id="s7" data-x="28" data-y="80">OK!</span>
+          <span class="sticker sticker--spark" data-id="s8" data-x="74" data-y="82">✦</span>
+        </div>
+        <p class="hint">拖曳貼紙排成你喜歡的樣子，位置會自動儲存</p>
+      </section>
+
+      <!-- ========== PHOTO BOOTH ========== -->
+      <section class="screen" id="photo" role="tabpanel" aria-labelledby="tab-photo" hidden>
+        <div class="section-row">
+          <p class="pixel-label section-label">// PHOTO BOOTH</p>
+          <span class="chip cam-status" id="camStatus">● OFF</span>
+        </div>
+
+        <article class="card booth">
+          <div class="viewfinder" id="viewfinder" data-filter="none" data-frame="star" data-mode="strip">
+            <video id="camVideo" playsinline muted autoplay></video>
+            <img id="camStill" alt="" hidden>
+            <div class="viewfinder__frame" aria-hidden="true"></div>
+            <span class="viewfinder__shots" id="shotCount" aria-hidden="true"></span>
+            <div class="viewfinder__count" id="camCount" aria-live="assertive"></div>
+            <div class="viewfinder__flash" id="camFlash" aria-hidden="true"></div>
+            <div class="viewfinder__idle" id="camIdle">
+              <span class="viewfinder__icon" aria-hidden="true">▣</span>
+              <p id="camMsg">打開相機，來拍一組大頭貼吧</p>
+              <button class="btn" type="button" id="camStart">CAMERA ON</button>
+              <label class="chip upload-chip">或上傳一張照片<input class="visually-hidden" type="file" accept="image/*" id="camUpload"></label>
+            </div>
+          </div>
+
+          <div class="booth__opts">
+            <div class="opt-row" role="radiogroup" aria-label="模式">
+              <span class="pixel-label opt-row__label">MODE</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="mode" data-value="strip">四格</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="mode" data-value="single">單張</button>
+            </div>
+            <div class="opt-row" role="radiogroup" aria-label="濾鏡">
+              <span class="pixel-label opt-row__label">FILTER</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="filter" data-value="none">原色</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="pink">粉嫩</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="mono">黑白</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="retro">復古</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="blue">冷光</button>
+            </div>
+            <div class="opt-row" role="radiogroup" aria-label="邊框">
+              <span class="pixel-label opt-row__label">FRAME</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="frame" data-value="star">✦ 星星</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="frame" data-value="heart">♡ 愛心</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="frame" data-value="cloud">☁︎ 雲朵</button>
+            </div>
+          </div>
+
+          <div class="booth__foot">
+            <button class="shutter" type="button" id="shutter" aria-label="拍照" disabled><span></span></button>
+          </div>
+        </article>
+
+        <div class="result" id="result" hidden>
+          <p class="pixel-label section-label">// YOUR PRINT</p>
+          <div class="result__print"><img id="resultImg" alt="剛拍好的大頭貼"></div>
+          <div class="result__actions">
+            <a class="btn" id="saveBtn" href="#" download>SAVE ↓</a>
+            <button class="btn btn--chrome" type="button" id="avatarBtn">設為頭像</button>
+            <button class="chip" type="button" id="retakeBtn">再拍一次</button>
+          </div>
+          <p class="hint">手機上也可以長按圖片直接儲存</p>
+        </div>
+
+        <p class="hint">照片只在你的裝置上處理，不會上傳到任何地方</p>
+        <p class="hint"><button class="chip" type="button" id="avatarReset" hidden>還原預設頭像</button></p>
+      </section>
+
+      <!-- ========== MEMO ========== -->
+      <section class="screen" id="memo" role="tabpanel" aria-labelledby="tab-memo" hidden>
+        <p class="pixel-label section-label">// GUESTBOOK</p>
+        <form class="card memo-form" id="memoForm" autocomplete="off">
+          <label class="field">
+            <span class="pixel-label">NICKNAME</span>
+            <input type="text" name="name" maxlength="16" placeholder="bubble_girl" required>
+          </label>
+          <label class="field">
+            <span class="pixel-label">MESSAGE</span>
+            <textarea name="msg" maxlength="80" rows="3" placeholder="留下一句話吧 ♡" required></textarea>
+          </label>
+          <div class="memo-form__foot">
+            <span class="counter" id="memoCount">0 / 80</span>
+            <button type="submit" class="btn">SEND ✉</button>
+          </div>
+        </form>
+        <ul class="memo-list" id="memoList"></ul>
+        <p class="hint" id="memoEmpty">還沒有留言，當第一個吧！</p>
+      </section>
+
+    </div>
+
+    <!-- Dock -->
+    <nav class="dock" role="tablist" aria-label="主選單">
+      <button class="dock__btn is-active" role="tab" id="tab-home" data-target="home" aria-selected="true" aria-controls="home">
+        <span class="dock__icon">⌂</span><span class="dock__label">HOME</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-music" data-target="music" aria-selected="false" aria-controls="music">
+        <span class="dock__icon">◉</span><span class="dock__label">MUSIC</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-stickers" data-target="stickers" aria-selected="false" aria-controls="stickers">
+        <span class="dock__icon">♡</span><span class="dock__label">STICKER</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-photo" data-target="photo" aria-selected="false" aria-controls="photo">
+        <span class="dock__icon">▣</span><span class="dock__label">PHOTO</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-memo" data-target="memo" aria-selected="false" aria-controls="memo">
+        <span class="dock__icon">✎</span><span class="dock__label">MEMO</span>
+      </button>
+    </nav>
+  </main>
+
+  <script>
+/* =========================================================
+   BUBBLE.OS — interactions
+   ========================================================= */
+(() => {
+  'use strict';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // localStorage 安全包裝（無痕模式或被封鎖時不會報錯）
+  const store = {
+    get(key, fallback) {
+      try {
+        const v = localStorage.getItem(key);
+        return v === null ? fallback : JSON.parse(v);
+      } catch { return fallback; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
+    }
+  };
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  /* ---------- 1. Boot ---------- */
+  function boot() {
+    const el = $('#boot');
+    if (!el) return;
+    let seen = false;
+    try { seen = sessionStorage.getItem('bubble-booted') === '1'; } catch { /* ignore */ }
+    if (reduceMotion || seen) { el.remove(); return; }
+
+    const lines = [
+      '> BUBBLE.OS v2.0.0',
+      '> checking memory ..... OK',
+      '> loading pastel.drv .. OK',
+      '> signal ★★★★ found',
+      '> hello :)'
+    ];
+    const log = $('#bootLog');
+    const bar = $('#bootBar');
+    let i = 0;
+
+    const finish = () => {
+      try { sessionStorage.setItem('bubble-booted', '1'); } catch { /* ignore */ }
+      el.classList.add('is-done');
+      setTimeout(() => el.remove(), 700);
+    };
+    const tick = () => {
+      if (i < lines.length) {
+        log.textContent += lines[i] + '\n';
+        i += 1;
+        bar.style.width = (i / lines.length) * 100 + '%';
+        setTimeout(tick, 280);
+      } else {
+        setTimeout(finish, 350);
+      }
+    };
+    tick();
+  }
+
+  /* ---------- 2. Clock ---------- */
+  function clock() {
+    const timeEl = $('#clock');
+    const dateEl = $('#today');
+    const update = () => {
+      const d = new Date();
+      timeEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      if (dateEl) dateEl.textContent = `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+    };
+    update();
+    setInterval(update, 15000);
+  }
+
+  /* ---------- 3. Theme ---------- */
+  function theme() {
+    const root = document.documentElement;
+    const btn = $('#themeBtn');
+    const icon = $('.theme-btn__icon', btn);
+    const meta = $('meta[name="theme-color"]');
+    const systemNight = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const apply = (mode) => {
+      root.dataset.theme = mode;
+      icon.textContent = mode === 'night' ? '☾' : '☀︎';
+      meta.setAttribute('content', mode === 'night' ? '#0b1030' : '#bfe0ff');
+    };
+    apply(store.get('bubble-theme', systemNight ? 'night' : 'day'));
+
+    btn.addEventListener('click', () => {
+      const next = root.dataset.theme === 'night' ? 'day' : 'night';
+      apply(next);
+      store.set('bubble-theme', next);
+    });
+  }
+
+  /* ---------- 4. Tabs + hash routing ---------- */
+  function tabs() {
+    const buttons = $$('.dock__btn');
+    const screens = $$('.screen');
+    const ids = screens.map((s) => s.id);
+
+    const show = (id, push = true) => {
+      if (!ids.includes(id)) id = 'home';
+      screens.forEach((s) => {
+        const on = s.id === id;
+        s.hidden = !on;
+        s.classList.toggle('is-active', on);
+        if (on) s.scrollTop = 0;
+      });
+      buttons.forEach((b) => {
+        const on = b.dataset.target === id;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', String(on));
+      });
+      if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
+      // 通知其他模組（例如離開拍照頁時要關閉相機）
+      document.dispatchEvent(new CustomEvent('screen:change', { detail: id }));
+    };
+
+    buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.target)));
+    $$('[data-go]').forEach((b) => b.addEventListener('click', () => show(b.dataset.go)));
+    window.addEventListener('hashchange', () => show(location.hash.slice(1), false));
+    show(location.hash.slice(1) || 'home', false);
+  }
+
+  /* ---------- 5. Tap sparkles ---------- */
+  function sparkles() {
+    if (reduceMotion) return;
+    const chars = ['✦', '✧', '★', '♡', '·'];
+    const colors = ['var(--pink)', 'var(--sky)', 'var(--lime)'];
+    document.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.sticker, input, textarea')) return;
+      for (let i = 0; i < 6; i += 1) {
+        const s = document.createElement('span');
+        s.className = 'spark';
+        s.textContent = chars[Math.floor(Math.random() * chars.length)];
+        const angle = (Math.PI * 2 * i) / 6 + Math.random() * 0.5;
+        const dist = 26 + Math.random() * 22;
+        s.style.left = e.clientX + 'px';
+        s.style.top = e.clientY + 'px';
+        s.style.color = colors[i % colors.length];
+        s.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        s.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        s.addEventListener('animationend', () => s.remove(), { once: true });
+        document.body.appendChild(s);
+      }
+    });
+  }
+
+  /* ---------- 6. 8-bit music player (Web Audio) ---------- */
+  // 音高使用 MIDI 編號（60 = 中央 C），null = 休止符。每個音符是 16 分音符。
+  const TRACKS = [
+    {
+      title: 'Bubble Signal', artist: 'Pocket Club', bpm: 124, loops: 4,
+      notes: [72, null, 76, 79, 81, null, 79, 76, 74, null, 76, 72, 69, null, 72, null,
+              72, null, 76, 79, 84, null, 83, 81, 79, null, 76, 74, 76, null, null, null]
+    },
+    {
+      title: 'Cloud Cassette', artist: 'Pocket Club', bpm: 100, loops: 4,
+      notes: [67, 71, 74, 71, 76, null, 74, null, 72, 76, 79, 76, 81, null, 79, null,
+              77, 76, 74, 72, 74, null, 71, null, 72, null, null, null, 67, null, null, null]
+    },
+    {
+      title: 'Sticker Heart', artist: 'Pocket Club', bpm: 136, loops: 5,
+      notes: [76, 76, null, 79, null, 81, 79, null, 76, null, 74, 76, null, 72, null, null,
+              74, 74, null, 77, null, 79, 77, null, 76, null, 72, 74, null, 76, null, null]
+    }
+  ];
+
+  function player() {
+    const card = $('#player');
+    const titleEl = $('#trackTitle');
+    const artistEl = $('#trackArtist');
+    const fill = $('#progressFill');
+    const nowEl = $('#timeNow');
+    const totalEl = $('#timeTotal');
+    const playBtn = $('#playBtn');
+    const list = $('#playlist');
+    const bars = $$('.eq i');
+
+    let ctx = null;
+    let master = null;
+    let current = 0;
+    let step = 0;
+    let timer = null;
+
+    const stepSec = (t) => 60 / t.bpm / 4;
+    const totalSteps = (t) => t.notes.length * t.loops;
+    const duration = (t) => totalSteps(t) * stepSec(t);
+    const fmt = (sec) => `${Math.floor(sec / 60)}:${pad(Math.floor(sec % 60))}`;
+    const midiToFreq = (n) => 440 * Math.pow(2, (n - 69) / 12);
+
+    // 播放清單
+    TRACKS.forEach((t, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      const no = document.createElement('span');
+      const name = document.createElement('span');
+      const len = document.createElement('span');
+      no.className = 'playlist__no'; no.textContent = pad(i + 1);
+      name.className = 'playlist__name'; name.textContent = t.title;
+      len.className = 'playlist__len'; len.textContent = fmt(duration(t));
+      b.append(no, name, len);
+      b.addEventListener('click', () => { load(i); play(); });
+      li.appendChild(b);
+      list.appendChild(li);
+    });
+
+    function ensureAudio() {
+      if (ctx) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = 0.08; // 音量（0–1）
+      master.connect(ctx.destination);
+    }
+
+    function blip(freq, len, type = 'square', vol = 1) {
+      if (!ctx) return;
+      const t0 = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(vol, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + len);
+      osc.connect(g).connect(master);
+      osc.start(t0);
+      osc.stop(t0 + len + 0.02);
+    }
+
+    function render() {
+      const t = TRACKS[current];
+      const elapsed = step * stepSec(t);
+      fill.style.width = Math.min(100, (step / totalSteps(t)) * 100) + '%';
+      nowEl.textContent = fmt(elapsed);
+    }
+
+    function load(i) {
+      current = (i + TRACKS.length) % TRACKS.length;
+      step = 0;
+      const t = TRACKS[current];
+      titleEl.textContent = t.title;
+      artistEl.textContent = t.artist;
+      totalEl.textContent = fmt(duration(t));
+      $$('li', list).forEach((li, idx) => li.classList.toggle('is-current', idx === current));
+      render();
+      if (timer) { stop(); play(); }
+    }
+
+    function tick() {
+      const t = TRACKS[current];
+      const note = t.notes[step % t.notes.length];
+      const sl = stepSec(t);
+      if (note !== null) blip(midiToFreq(note), sl * 1.6, 'square', 1);
+      // 簡單的低音：每 4 拍一個三角波
+      if (step % 4 === 0) {
+        const root = t.notes[(step - (step % 8)) % t.notes.length] || 60;
+        blip(midiToFreq(root - 24), sl * 3, 'triangle', 1.4);
+      }
+      bars.forEach((b) => { b.style.height = (note === null ? 10 + Math.random() * 20 : 25 + Math.random() * 75) + '%'; });
+
+      step += 1;
+      render();
+      if (step >= totalSteps(t)) { stop(); load(current + 1); play(); }
+    }
+
+    function play() {
+      ensureAudio();
+      if (ctx && ctx.state === 'suspended') ctx.resume();
+      if (timer) return;
+      timer = setInterval(tick, stepSec(TRACKS[current]) * 1000);
+      card.classList.add('is-playing');
+      playBtn.textContent = '❚❚';
+      playBtn.setAttribute('aria-label', '暫停');
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+      card.classList.remove('is-playing');
+      playBtn.textContent = '▶';
+      playBtn.setAttribute('aria-label', '播放');
+      bars.forEach((b) => { b.style.height = '20%'; });
+    }
+
+    playBtn.addEventListener('click', () => (timer ? stop() : play()));
+    $('#prevBtn').addEventListener('click', () => load(current - 1));
+    $('#nextBtn').addEventListener('click', () => load(current + 1));
+
+    // 切到別的分頁或背景時暫停
+    document.addEventListener('visibilitychange', () => { if (document.hidden && timer) stop(); });
+
+    load(0);
+  }
+
+  /* ---------- 7. Draggable stickers ---------- */
+  function stickers() {
+    const board = $('#board');
+    const items = $$('.sticker', board);
+    const KEY = 'bubble-stickers';
+    let saved = store.get(KEY, {});
+    let z = 10;
+
+    const place = (el, x, y) => {
+      el.style.left = x + '%';
+      el.style.top = y + '%';
+    };
+    const resetAll = () => items.forEach((el) => place(el, +el.dataset.x, +el.dataset.y));
+
+    items.forEach((el) => {
+      const pos = saved[el.dataset.id];
+      if (pos) place(el, pos.x, pos.y); else place(el, +el.dataset.x, +el.dataset.y);
+
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        el.setPointerCapture(e.pointerId);
+        el.classList.add('is-dragging');
+        el.style.zIndex = ++z;
+        const rect = board.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        const offX = e.clientX - r.left;
+        const offY = e.clientY - r.top;
+
+        const move = (ev) => {
+          const maxX = rect.width - r.width;
+          const maxY = rect.height - r.height;
+          const px = Math.max(0, Math.min(maxX, ev.clientX - rect.left - offX));
+          const py = Math.max(0, Math.min(maxY, ev.clientY - rect.top - offY));
+          place(el, (px / rect.width) * 100, (py / rect.height) * 100);
+        };
+        const up = () => {
+          el.classList.remove('is-dragging');
+          el.removeEventListener('pointermove', move);
+          saved[el.dataset.id] = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) };
+          store.set(KEY, saved);
+        };
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerup', up, { once: true });
+        el.addEventListener('pointercancel', up, { once: true });
+      });
+    });
+
+    $('#stickerReset').addEventListener('click', () => {
+      saved = {};
+      store.set(KEY, saved);
+      resetAll();
+    });
+  }
+
+  /* ---------- 8. Guestbook ---------- */
+  function memo() {
+    const form = $('#memoForm');
+    const list = $('#memoList');
+    const empty = $('#memoEmpty');
+    const counter = $('#memoCount');
+    const KEY = 'bubble-memo';
+    const MAX = 30;
+    let items = store.get(KEY, []);
+    if (!Array.isArray(items)) items = [];
+
+    const fmtTime = (ts) => {
+      const d = new Date(ts);
+      return `${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    };
+
+    function render() {
+      list.textContent = '';
+      items.forEach((m) => {
+        const li = document.createElement('li');
+        li.className = 'card memo-item';
+
+        const head = document.createElement('div');
+        head.className = 'memo-item__head';
+        const name = document.createElement('span');
+        name.className = 'memo-item__name';
+        name.textContent = '♡ ' + m.name;
+        const time = document.createElement('span');
+        time.className = 'memo-item__time';
+        time.textContent = fmtTime(m.ts);
+        const del = document.createElement('button');
+        del.className = 'memo-item__del';
+        del.type = 'button';
+        del.textContent = '✕';
+        del.setAttribute('aria-label', '刪除這則留言');
+        del.addEventListener('click', () => {
+          items = items.filter((x) => x.ts !== m.ts);
+          store.set(KEY, items);
+          render();
+        });
+        head.append(name, time, del);
+
+        const msg = document.createElement('p');
+        msg.className = 'memo-item__msg';
+        msg.textContent = m.msg; // textContent：不解析 HTML，避免 XSS
+
+        li.append(head, msg);
+        list.appendChild(li);
+      });
+      empty.hidden = items.length > 0;
+    }
+
+    form.msg.addEventListener('input', () => {
+      counter.textContent = `${form.msg.value.length} / 80`;
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = form.name.value.trim().slice(0, 16);
+      const msg = form.msg.value.trim().slice(0, 80);
+      if (!name || !msg) return;
+      items.unshift({ name, msg, ts: Date.now() });
+      items = items.slice(0, MAX);
+      store.set(KEY, items);
+      form.msg.value = '';
+      counter.textContent = '0 / 80';
+      render();
+    });
+
+    render();
+  }
+
+  /* ---------- 9. Photo booth（大頭貼機） ---------- */
+  function photo() {
+    const vf = $('#viewfinder');
+    const video = $('#camVideo');
+    const still = $('#camStill');
+    const idle = $('#camIdle');
+    const msg = $('#camMsg');
+    const countEl = $('#camCount');
+    const flashEl = $('#camFlash');
+    const shotEl = $('#shotCount');
+    const statusEl = $('#camStatus');
+    const shutter = $('#shutter');
+    const upload = $('#camUpload');
+    const result = $('#result');
+    const resultImg = $('#resultImg');
+    const saveBtn = $('#saveBtn');
+    const avatarBtn = $('#avatarBtn');
+    const avatarReset = $('#avatarReset');
+    const avatarEl = $('.avatar');
+    const stripChip = $('[data-opt="mode"][data-value="strip"]');
+    const DEFAULT_MSG = msg.textContent;
+    const AVATAR_KEY = 'bubble-avatar';
+
+    const opts = { mode: 'strip', filter: 'none', frame: 'star' };
+
+    // 邊框主題：底色、描邊色、貼紙字元與顏色
+    const THEMES = {
+      star:  { bg: '#bfe0ff', ink: '#1d2a6b', deco: ['✦', '★', '✧'], colors: ['#fff1a8', '#d4ff5e', '#ffffff'] },
+      heart: { bg: '#ffc8e4', ink: '#1d2a6b', deco: ['♡', '♥', '✦'], colors: ['#ffffff', '#ff7ec0', '#fff1a8'] },
+      cloud: { bg: '#fffaf0', ink: '#1d2a6b', deco: ['☁︎', '✿', '✧'], colors: ['#c8e6ff', '#ffc8e4', '#9fd0ff'] }
+    };
+
+    let stream = null;
+    let source = null;   // 'cam'（相機）| 'still'（上傳的照片）| null
+    let session = 0;     // 離開頁面時 +1，用來中斷進行中的拍攝
+    let busy = false;
+    let lastShots = [];
+    let resultURL = null;
+    let stillURL = null;
+    let actx = null;
+
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    /* 快門與倒數音效 */
+    function beep(freq, len) {
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        if (!actx) actx = new AC();
+        if (actx.state === 'suspended') actx.resume();
+        const t0 = actx.currentTime;
+        const osc = actx.createOscillator();
+        const g = actx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0.06, t0);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + len);
+        osc.connect(g).connect(actx.destination);
+        osc.start(t0);
+        osc.stop(t0 + len + 0.02);
+      } catch { /* ignore */ }
+    }
+
+    function setStatus(text, live = false) {
+      statusEl.textContent = '● ' + text;
+      statusEl.classList.toggle('is-live', live);
+    }
+
+    function setOpt(key, value) {
+      opts[key] = value;
+      vf.dataset[key] = value;
+      $$(`[data-opt="${key}"]`).forEach((c) => {
+        const on = c.dataset.value === value;
+        c.classList.toggle('is-on', on);
+        c.setAttribute('aria-checked', String(on));
+      });
+    }
+
+    function stopStream() {
+      if (stream) stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+      video.srcObject = null;
+    }
+
+    function resetBooth() {
+      session += 1;
+      busy = false;
+      stopStream();
+      source = null;
+      if (stillURL) { URL.revokeObjectURL(stillURL); stillURL = null; }
+      still.hidden = true;
+      still.removeAttribute('src');
+      video.hidden = false;
+      idle.hidden = false;
+      countEl.textContent = '';
+      shotEl.textContent = '';
+      msg.textContent = DEFAULT_MSG;
+      shutter.disabled = true;
+      stripChip.disabled = false;
+      setStatus('OFF');
+    }
+
+    /* 開相機 */
+    async function startCam() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        msg.textContent = '這個網址或瀏覽器不能使用相機（需要 https）。可以改用上傳照片。';
+        return;
+      }
+      const my = session;
+      msg.textContent = '等待相機權限…';
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        if (my !== session) { s.getTracks().forEach((t) => t.stop()); return; }
+        stopStream();
+        stream = s;
+        video.srcObject = s;
+        await video.play().catch(() => {});
+        source = 'cam';
+        still.hidden = true;
+        video.hidden = false;
+        idle.hidden = true;
+        stripChip.disabled = false;
+        shutter.disabled = false;
+        setStatus('LIVE', true);
+      } catch (err) {
+        msg.textContent = err && err.name === 'NotAllowedError'
+          ? '相機權限被拒絕了。可以到瀏覽器設定允許相機，或改用上傳照片。'
+          : '找不到可以用的相機，可以改用上傳照片。';
+      }
+    }
+
+    /* 上傳照片（沒有相機時的備案，只支援單張） */
+    function useUpload() {
+      const file = upload.files && upload.files[0];
+      upload.value = '';
+      if (!file || !file.type.startsWith('image/')) return;
+      stopStream();
+      if (stillURL) URL.revokeObjectURL(stillURL);
+      stillURL = URL.createObjectURL(file);
+      still.onload = () => {
+        source = 'still';
+        still.hidden = false;
+        video.hidden = true;
+        idle.hidden = true;
+        setOpt('mode', 'single');
+        stripChip.disabled = true;
+        shutter.disabled = false;
+        setStatus('PHOTO');
+      };
+      still.onerror = () => { msg.textContent = '這張圖片打不開，換一張試試。'; };
+      still.src = stillURL;
+    }
+
+    /* 以「填滿裁切」的方式把畫面畫進格子 */
+    function drawCover(ctx, el, sw, sh, w, h, mirror) {
+      const sr = sw / sh;
+      const dr = w / h;
+      let sx = 0, sy = 0, cw = sw, ch = sh;
+      if (sr > dr) { cw = sh * dr; sx = (sw - cw) / 2; } else { ch = sw / dr; sy = (sh - ch) / 2; }
+      ctx.save();
+      if (mirror) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+      ctx.drawImage(el, sx, sy, cw, ch, 0, 0, w, h);
+      ctx.restore();
+    }
+
+    /* 逐像素濾鏡（不依賴 ctx.filter，Safari 也能用） */
+    function applyFilter(ctx, w, h, type) {
+      if (type === 'none') return;
+      const img = ctx.getImageData(0, 0, w, h);
+      const d = img.data; // Uint8ClampedArray：超出 0–255 會自動截斷
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2];
+        if (type === 'pink') {
+          d[i] = r * 0.92 + 40; d[i + 1] = g * 0.88 + 22; d[i + 2] = b * 0.9 + 38;
+        } else if (type === 'mono') {
+          const l = (0.299 * r + 0.587 * g + 0.114 * b - 128) * 1.15 + 128;
+          d[i] = d[i + 1] = d[i + 2] = l;
+        } else if (type === 'retro') {
+          const n = (Math.random() - 0.5) * 24; // 底片顆粒
+          const sr = 0.393 * r + 0.769 * g + 0.189 * b;
+          const sg = 0.349 * r + 0.686 * g + 0.168 * b;
+          const sb = 0.272 * r + 0.534 * g + 0.131 * b;
+          d[i]     = (sr * 0.6 + r * 0.4) * 0.85 + 28 + n;
+          d[i + 1] = (sg * 0.6 + g * 0.4) * 0.85 + 28 + n;
+          d[i + 2] = (sb * 0.6 + b * 0.4) * 0.85 + 28 + n;
+        } else if (type === 'blue') {
+          d[i] = r * 0.85 + 10; d[i + 1] = g * 0.95 + 20; d[i + 2] = b * 0.95 + 45;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    function capture(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      const ctx = c.getContext('2d');
+      if (source === 'cam') {
+        if (!video.videoWidth) return null;
+        drawCover(ctx, video, video.videoWidth, video.videoHeight, w, h, true);
+      } else if (source === 'still') {
+        drawCover(ctx, still, still.naturalWidth, still.naturalHeight, w, h, false);
+      } else {
+        return null;
+      }
+      applyFilter(ctx, w, h, opts.filter);
+      return c;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    /* 畫一個有深藍描邊的貼紙字元 */
+    function sticker(ctx, ch, x, y, size, color, ink) {
+      ctx.save();
+      ctx.font = `${size}px "Noto Sans TC", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = Math.max(4, size / 7);
+      ctx.strokeStyle = ink;
+      ctx.strokeText(ch, x, y);
+      ctx.fillStyle = color;
+      ctx.fillText(ch, x, y);
+      ctx.restore();
+    }
+
+    /* 把拍到的照片合成成一張大頭貼 */
+    async function compose(shots) {
+      const t = THEMES[opts.frame];
+      const n = shots.length;
+      const cw = shots[0].width;
+      const ch = shots[0].height;
+      const P = 20;   // 外邊距
+      const G = 16;   // 格子間距
+      const F = 130;  // 底部標籤高度
+      const W = cw + P * 2;
+      const H = P + n * ch + (n - 1) * G + F;
+
+      try {
+        await Promise.all([document.fonts.load('700 36px Silkscreen'), document.fonts.load('28px VT323')]);
+      } catch { /* 字體載不到就用備用字體 */ }
+
+      const c = document.createElement('canvas');
+      c.width = W;
+      c.height = H;
+      const ctx = c.getContext('2d');
+
+      // 底色 + 圓點花紋
+      ctx.fillStyle = t.bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = 'rgba(29, 42, 107, 0.08)';
+      for (let y = 13; y < H; y += 26) {
+        for (let x = 13; x < W; x += 26) {
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 每一格照片 + 貼紙
+      shots.forEach((shot, i) => {
+        const x = P;
+        const y = P + i * (ch + G);
+        ctx.save();
+        roundRect(ctx, x, y, cw, ch, 14);
+        ctx.clip();
+        ctx.drawImage(shot, x, y);
+        ctx.restore();
+        roundRect(ctx, x, y, cw, ch, 14);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = t.ink;
+        ctx.stroke();
+        sticker(ctx, t.deco[i % 3], x + 30, y + 30, 44, t.colors[0], t.ink);
+        sticker(ctx, t.deco[(i + 1) % 3], x + cw - 34, y + ch - 32, 38, t.colors[1], t.ink);
+        sticker(ctx, t.deco[(i + 2) % 3], x + cw - 30, y + 34, 26, t.colors[2], t.ink);
+      });
+
+      // 底部標籤
+      const d = new Date();
+      const dateStr = `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+      const stamp = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+      const fy = H - F;
+      ctx.fillStyle = t.ink;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.font = '700 36px Silkscreen, monospace';
+      ctx.fillText('BUBBLE.OS', W / 2, fy + 62);
+      ctx.font = '28px VT323, monospace';
+      ctx.fillText(`${dateStr}  ★  PHOTO BOOTH`, W / 2, fy + 98);
+      sticker(ctx, t.deco[0], 44, fy + 52, 40, t.colors[0], t.ink);
+      sticker(ctx, t.deco[1], W - 44, fy + 52, 40, t.colors[1], t.ink);
+
+      return { canvas: c, stamp };
+    }
+
+    function showResult(c, stamp, single) {
+      c.toBlob((blob) => {
+        if (!blob) return;
+        if (resultURL) URL.revokeObjectURL(resultURL);
+        resultURL = URL.createObjectURL(blob);
+        resultImg.src = resultURL;
+        resultImg.classList.toggle('is-single', single);
+        saveBtn.href = resultURL;
+        saveBtn.download = `bubble-os-${stamp}.png`;
+        result.hidden = false;
+        result.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      }, 'image/png');
+    }
+
+    async function countdown(my) {
+      for (let s = 3; s > 0; s -= 1) {
+        if (my !== session) return false;
+        countEl.textContent = String(s);
+        countEl.classList.remove('pop');
+        void countEl.offsetWidth; // 重新觸發動畫
+        countEl.classList.add('pop');
+        beep(880, 0.08);
+        await wait(800);
+      }
+      countEl.textContent = '';
+      return my === session;
+    }
+
+    function flash() {
+      flashEl.classList.remove('on');
+      void flashEl.offsetWidth;
+      flashEl.classList.add('on');
+      beep(1320, 0.05);
+      setTimeout(() => beep(1760, 0.08), 60);
+    }
+
+    async function shoot() {
+      if (busy || !source) return;
+      busy = true;
+      const my = session;
+      shutter.disabled = true;
+      const n = source === 'cam' && opts.mode === 'strip' ? 4 : 1;
+      const [w, h] = n === 4 ? [480, 360] : [480, 600];
+      const shots = [];
+
+      for (let i = 0; i < n; i += 1) {
+        shotEl.textContent = n > 1 ? `${i + 1} / ${n}` : '';
+        if (source === 'cam' && !(await countdown(my))) return;
+        if (my !== session) return;
+        flash();
+        const shot = capture(w, h);
+        if (shot) shots.push(shot);
+        await wait(n > 1 ? 600 : 200);
+      }
+      if (my !== session) return;
+      shotEl.textContent = '';
+
+      if (shots.length) {
+        lastShots = shots;
+        const { canvas, stamp } = await compose(shots);
+        if (my === session) showResult(canvas, stamp, n === 1);
+      }
+      busy = false;
+      shutter.disabled = !source;
+    }
+
+    /* 頭像：只接受自己產生的 data URL，避免被塞入奇怪的 CSS */
+    const isAvatarURL = (u) => typeof u === 'string' && /^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(u);
+
+    function applyAvatar(url) {
+      if (!avatarEl) return;
+      if (isAvatarURL(url)) {
+        avatarEl.style.backgroundImage = `url("${url}")`;
+        avatarEl.classList.add('has-photo');
+        avatarReset.hidden = false;
+      } else {
+        avatarEl.style.backgroundImage = '';
+        avatarEl.classList.remove('has-photo');
+        avatarReset.hidden = true;
+      }
+    }
+
+    function setAvatarFromShot() {
+      const src = lastShots[0];
+      if (!src) return;
+      const s = Math.min(src.width, src.height);
+      const c = document.createElement('canvas');
+      c.width = 240;
+      c.height = 240;
+      c.getContext('2d').drawImage(src, (src.width - s) / 2, (src.height - s) / 2, s, s, 0, 0, 240, 240);
+      const url = c.toDataURL('image/jpeg', 0.85);
+      store.set(AVATAR_KEY, url);
+      applyAvatar(url);
+      avatarBtn.textContent = '已設定 ✓';
+      setTimeout(() => { avatarBtn.textContent = '設為頭像'; }, 1500);
+    }
+
+    /* 事件 */
+    $$('[data-opt]').forEach((chip) => chip.addEventListener('click', () => {
+      if (chip.disabled || busy) return;
+      setOpt(chip.dataset.opt, chip.dataset.value);
+    }));
+    $('#camStart').addEventListener('click', startCam);
+    upload.addEventListener('change', useUpload);
+    shutter.addEventListener('click', shoot);
+    $('#retakeBtn').addEventListener('click', () => {
+      result.hidden = true;
+      vf.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    });
+    avatarBtn.addEventListener('click', setAvatarFromShot);
+    avatarReset.addEventListener('click', () => {
+      store.set(AVATAR_KEY, null);
+      applyAvatar(null);
+    });
+
+    // 離開拍照頁或切到背景時關相機（綠燈會熄滅）
+    document.addEventListener('screen:change', (e) => {
+      if (e.detail !== 'photo' && (source || busy)) resetBooth();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && source === 'cam') resetBooth();
+    });
+
+    applyAvatar(store.get(AVATAR_KEY, null));
+    setStatus('OFF');
+  }
+
+  /* ---------- Init ---------- */
+  boot();
+  clock();
+  theme();
+  tabs();
+  sparkles();
+  player();
+  stickers();
+  memo();
+  photo();
+})();
+
+  </script>
+</body>
+</html>
