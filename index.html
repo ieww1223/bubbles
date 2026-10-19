@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#bfe0ff">
+  <meta name="description" content="BUBBLE.OS — a Y2K pocket homepage">
+  <title>BUBBLE.OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Boot screen ===== -->
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot__logo">BUBBLE<span>.OS</span></div>
+    <pre class="boot__log" id="bootLog"></pre>
+    <div class="boot__bar"><i id="bootBar"></i></div>
+  </div>
+
+  <!-- ===== Background ===== -->
+  <div class="bg" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+    <div class="floor"></div>
+  </div>
+
+  <main class="phone" id="phone">
+
+    <!-- Status bar -->
+    <header class="status">
+      <span class="status__signal" aria-label="signal full"><i></i><i></i><i></i><i></i></span>
+      <span class="status__time" id="clock">00:00</span>
+      <span class="status__batt" aria-label="battery 80%"><i></i></span>
+    </header>
+
+    <div class="screens">
+
+      <!-- ========== HOME ========== -->
+      <section class="screen is-active" id="home" role="tabpanel" aria-labelledby="tab-home">
+        <div class="hero">
+          <button class="theme-btn" id="themeBtn" aria-label="切換日夜模式">
+            <span class="theme-btn__icon">☀︎</span>
+          </button>
+          <p class="pixel-label">// ver 2.0 · <span id="today">2000.01.01</span></p>
+          <h1 class="chrome-text">HELLO,<br>NEW<br>SIGNAL</h1>
+          <p class="hero__sub">一台來自 2003 年的未來手機。<br>收訊滿格，心情晴朗 ☁︎</p>
+          <span class="star star--a">✦</span>
+          <span class="star star--b">✧</span>
+          <span class="star star--c">★</span>
+        </div>
+
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee__track">
+            <span>★ NEW SIGNAL ★ POCKET CLUB ★ STAY CUTE ★ LOADING HAPPINESS ★ 2003 FOREVER ★&nbsp;</span>
+            <span>★ NEW SIGNAL ★ POCKET CLUB ★ STAY CUTE ★ LOADING HAPPINESS ★ 2003 FOREVER ★&nbsp;</span>
+          </div>
+        </div>
+
+        <article class="card idcard">
+          <header class="idcard__head">
+            <span class="pixel-label">MEMBER ID</span>
+            <span class="idcard__no">No. 0722</span>
+          </header>
+          <div class="idcard__body">
+            <button class="avatar" type="button" data-go="photo" aria-label="拍一張大頭照當頭像">
+              <span class="avatar__eye" aria-hidden="true"></span><span class="avatar__eye" aria-hidden="true"></span>
+              <span class="avatar__mouth" aria-hidden="true"></span>
+            </button>
+            <dl class="idcard__info">
+              <div><dt>NAME</dt><dd>YOUR NAME</dd></div>
+              <div><dt>BIRTH</dt><dd>2003.07.22</dd></div>
+              <div><dt>MOOD</dt><dd>☁︎ 晴時多雲</dd></div>
+              <div><dt>STATUS</dt><dd><span class="dot"></span> ONLINE</dd></div>
+            </dl>
+          </div>
+          <span class="holo" aria-hidden="true"></span>
+        </article>
+
+        <div class="tiles">
+          <button class="tile tile--blue" data-go="music"><span class="tile__icon">◉</span><span>MUSIC</span></button>
+          <button class="tile tile--pink" data-go="stickers"><span class="tile__icon">♡</span><span>STICKER</span></button>
+          <button class="tile tile--cream" data-go="memo"><span class="tile__icon">✎</span><span>MEMO</span></button>
+          <a class="tile tile--lime" href="https://github.com/" target="_blank" rel="noopener"><span class="tile__icon">↗</span><span>GITHUB</span></a>
+        </div>
+      </section>
+
+      <!-- ========== MUSIC ========== -->
+      <section class="screen" id="music" role="tabpanel" aria-labelledby="tab-music" hidden>
+        <p class="pixel-label section-label">// NOW PLAYING</p>
+        <article class="card player" id="player">
+          <div class="disc" aria-hidden="true"><span class="disc__hole"></span></div>
+          <div class="player__meta">
+            <h2 class="player__title" id="trackTitle">—</h2>
+            <p class="player__artist" id="trackArtist">—</p>
+          </div>
+          <div class="eq" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="progress">
+            <div class="progress__bar"><i id="progressFill"></i></div>
+            <div class="progress__time"><span id="timeNow">0:00</span><span id="timeTotal">0:00</span></div>
+          </div>
+          <div class="controls">
+            <button class="ctrl" id="prevBtn" aria-label="上一首">⏮</button>
+            <button class="ctrl ctrl--main" id="playBtn" aria-label="播放">▶</button>
+            <button class="ctrl" id="nextBtn" aria-label="下一首">⏭</button>
+          </div>
+        </article>
+
+        <p class="pixel-label section-label">// PLAYLIST</p>
+        <ol class="card playlist" id="playlist"></ol>
+        <p class="hint">♪ 音樂由瀏覽器即時合成 8-bit 音色，記得打開音量</p>
+      </section>
+
+      <!-- ========== STICKERS ========== -->
+      <section class="screen" id="stickers" role="tabpanel" aria-labelledby="tab-stickers" hidden>
+        <div class="section-row">
+          <p class="pixel-label section-label">// STICKER BOARD</p>
+          <button class="chip" id="stickerReset">RESET</button>
+        </div>
+        <div class="board" id="board">
+          <span class="sticker sticker--star"  data-id="s1" data-x="12" data-y="10">★</span>
+          <span class="sticker sticker--heart" data-id="s2" data-x="62" data-y="8">♡</span>
+          <span class="sticker sticker--text"  data-id="s3" data-x="30" data-y="34">Y2K</span>
+          <span class="sticker sticker--cloud" data-id="s4" data-x="66" data-y="38">☁︎</span>
+          <span class="sticker sticker--text sticker--pink" data-id="s5" data-x="10" data-y="58">BFF</span>
+          <span class="sticker sticker--flower" data-id="s6" data-x="56" data-y="64">✿</span>
+          <span class="sticker sticker--text sticker--lime" data-id="s7" data-x="28" data-y="80">OK!</span>
+          <span class="sticker sticker--spark" data-id="s8" data-x="74" data-y="82">✦</span>
+        </div>
+        <p class="hint">拖曳貼紙排成你喜歡的樣子，位置會自動儲存</p>
+      </section>
+
+      <!-- ========== PHOTO BOOTH ========== -->
+      <section class="screen" id="photo" role="tabpanel" aria-labelledby="tab-photo" hidden>
+        <div class="section-row">
+          <p class="pixel-label section-label">// PHOTO BOOTH</p>
+          <span class="chip cam-status" id="camStatus">● OFF</span>
+        </div>
+
+        <article class="card booth">
+          <div class="viewfinder" id="viewfinder" data-filter="none" data-frame="star" data-mode="strip">
+            <video id="camVideo" playsinline muted autoplay></video>
+            <img id="camStill" alt="" hidden>
+            <div class="viewfinder__frame" aria-hidden="true"></div>
+            <span class="viewfinder__shots" id="shotCount" aria-hidden="true"></span>
+            <div class="viewfinder__count" id="camCount" aria-live="assertive"></div>
+            <div class="viewfinder__flash" id="camFlash" aria-hidden="true"></div>
+            <div class="viewfinder__idle" id="camIdle">
+              <span class="viewfinder__icon" aria-hidden="true">▣</span>
+              <p id="camMsg">打開相機，來拍一組大頭貼吧</p>
+              <button class="btn" type="button" id="camStart">CAMERA ON</button>
+              <label class="chip upload-chip">或上傳一張照片<input class="visually-hidden" type="file" accept="image/*" id="camUpload"></label>
+            </div>
+          </div>
+
+          <div class="booth__opts">
+            <div class="opt-row" role="radiogroup" aria-label="模式">
+              <span class="pixel-label opt-row__label">MODE</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="mode" data-value="strip">四格</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="mode" data-value="single">單張</button>
+            </div>
+            <div class="opt-row" role="radiogroup" aria-label="濾鏡">
+              <span class="pixel-label opt-row__label">FILTER</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="filter" data-value="none">原色</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="pink">粉嫩</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="mono">黑白</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="retro">復古</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="filter" data-value="blue">冷光</button>
+            </div>
+            <div class="opt-row" role="radiogroup" aria-label="邊框">
+              <span class="pixel-label opt-row__label">FRAME</span>
+              <button class="chip is-on" type="button" role="radio" aria-checked="true" data-opt="frame" data-value="star">✦ 星星</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="frame" data-value="heart">♡ 愛心</button>
+              <button class="chip" type="button" role="radio" aria-checked="false" data-opt="frame" data-value="cloud">☁︎ 雲朵</button>
+            </div>
+          </div>
+
+          <div class="booth__foot">
+            <button class="shutter" type="button" id="shutter" aria-label="拍照" disabled><span></span></button>
+          </div>
+        </article>
+
+        <div class="result" id="result" hidden>
+          <p class="pixel-label section-label">// YOUR PRINT</p>
+          <div class="result__print"><img id="resultImg" alt="剛拍好的大頭貼"></div>
+          <div class="result__actions">
+            <a class="btn" id="saveBtn" href="#" download>SAVE ↓</a>
+            <button class="btn btn--chrome" type="button" id="avatarBtn">設為頭像</button>
+            <button class="chip" type="button" id="retakeBtn">再拍一次</button>
+          </div>
+          <p class="hint">手機上也可以長按圖片直接儲存</p>
+        </div>
+
+        <p class="hint">照片只在你的裝置上處理，不會上傳到任何地方</p>
+        <p class="hint"><button class="chip" type="button" id="avatarReset" hidden>還原預設頭像</button></p>
+      </section>
+
+      <!-- ========== MEMO ========== -->
+      <section class="screen" id="memo" role="tabpanel" aria-labelledby="tab-memo" hidden>
+        <p class="pixel-label section-label">// GUESTBOOK</p>
+        <form class="card memo-form" id="memoForm" autocomplete="off">
+          <label class="field">
+            <span class="pixel-label">NICKNAME</span>
+            <input type="text" name="name" maxlength="16" placeholder="bubble_girl" required>
+          </label>
+          <label class="field">
+            <span class="pixel-label">MESSAGE</span>
+            <textarea name="msg" maxlength="80" rows="3" placeholder="留下一句話吧 ♡" required></textarea>
+          </label>
+          <div class="memo-form__foot">
+            <span class="counter" id="memoCount">0 / 80</span>
+            <button type="submit" class="btn">SEND ✉</button>
+          </div>
+        </form>
+        <ul class="memo-list" id="memoList"></ul>
+        <p class="hint" id="memoEmpty">還沒有留言，當第一個吧！</p>
+      </section>
+
+    </div>
+
+    <!-- Dock -->
+    <nav class="dock" role="tablist" aria-label="主選單">
+      <button class="dock__btn is-active" role="tab" id="tab-home" data-target="home" aria-selected="true" aria-controls="home">
+        <span class="dock__icon">⌂</span><span class="dock__label">HOME</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-music" data-target="music" aria-selected="false" aria-controls="music">
+        <span class="dock__icon">◉</span><span class="dock__label">MUSIC</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-stickers" data-target="stickers" aria-selected="false" aria-controls="stickers">
+        <span class="dock__icon">♡</span><span class="dock__label">STICKER</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-photo" data-target="photo" aria-selected="false" aria-controls="photo">
+        <span class="dock__icon">▣</span><span class="dock__label">PHOTO</span>
+      </button>
+      <button class="dock__btn" role="tab" id="tab-memo" data-target="memo" aria-selected="false" aria-controls="memo">
+        <span class="dock__icon">✎</span><span class="dock__label">MEMO</span>
+      </button>
+    </nav>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
